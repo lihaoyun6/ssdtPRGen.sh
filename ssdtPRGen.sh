@@ -4071,6 +4071,7 @@ printf "Note: lihaoyun6 汉化于 2016.7.5\n\n"
                   -showall) shift
 
                              open https://raw.githubusercontent.com/lihaoyun6/ssdtPRGen.sh/Pentium/CPUlist.txt
+                             exit
                              ;;
                              
                   -p) shift
