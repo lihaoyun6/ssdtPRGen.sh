@@ -44,12 +44,7 @@ Usage: ./ssdtPRGen.sh [-abcdfhlmptwx]
        -m SMBIOS机型信息 (例如: MacPro6,1)
        -o 打开预先生成好的SSDT文件
        -p 处理器型号 (例如: 'E3-1285L v3')
-       -show 显示支持的处理器标识:
-           Sandy Bridge
-           Ivy Bridge
-           Haswell
-           Broadwell
-           Skylake
+       -showall 显示所有支持的处理器型号
        -target 处理器类型:
           0 = Sandy Bridge
           1 = Ivy Bridge
