@@ -30,12 +30,12 @@ gScriptVersion=18.9
 #
 # GitHub branch to pull data from (master or Beta).
 #
-gGitHubBranch="Beta"
+gGitHubBranch="P&C"
 
 #
 # Github download URL.
 #
-gGitHubContentURL="https://raw.githubusercontent.com/Piker-Alpha/ssdtPRGen.sh/${gGitHubBranch}"
+gGitHubContentURL="https://raw.githubusercontent.com/lihaoyun6/ssdtPRGen.sh/${gGitHubBranch}"
 
 #
 # Change this to 1 if you want to use the Github project directory instead of ~/Library/ssdtPRGen
