@@ -1,31 +1,8 @@
 #!/bin/bash
 #
-# Script (ssdtPRGen.sh) to create ssdt-pr.dsl for Apple Power Management Support.
-#
-# Version 0.9 - Copyright (c) 2012 by RevoGirl
-#
-# Version 18.9 - Copyright (c) 2014 by Pike <PikeRAlpha@yahoo.com>
-#
-# Readme......: https://github.com/Piker-Alpha/ssdtPRGen.sh/blob/master/README.md
-#
-# Change log..: https://github.com/Piker-Alpha/ssdtPRGen.sh/blob/master/CHANGELOG.md
-#
-# Contributors: https://github.com/Piker-Alpha/ssdtPRGen.sh/blob/master/CONTRIBUTORS.md
-#
-# Bug reports.: https://github.com/Piker-Alpha/ssdtPRGen.sh/issues
-#
-#			    Please provide clear steps to reproduce the bug, the terminal output
-#			    of the script (the log data) and the resulting SSDT.dsl Thank you!
-#
-
-# set -x # Used for tracing errors (can be used anywhere in the script).
-
-#================================= GLOBAL VARS ==================================
-
-#
 # Script version info.
 #
-gScriptVersion=18.9
+gScriptVersion=19.0
 
 #
 # GitHub branch to pull data from (master or Beta).
@@ -3784,55 +3761,56 @@ function _getScriptArguments()
 
       if [[ $# -eq 1 && "$argument" == "-h" || "$argument" == "-help"  ]];
         then
-          printf "\n${STYLE_BOLD}Usage:${STYLE_RESET} ./ssdtPRGen.sh [-abcdefghiklmnoprsutwx]\n"
-          printf "       -${STYLE_BOLD}a${STYLE_RESET}cpi Processor name (example: CPU0, C000)\n"
-          printf "       -${STYLE_BOLD}bclk${STYLE_RESET} frequency (base clock frequency)\n"
-          printf "       -${STYLE_BOLD}b${STYLE_RESET}oard-id (example: Mac-F60DEB81FF30ACF6)\n"
-          printf "       -${STYLE_BOLD}cpus${STYLE_RESET} number of physical processors [1-4]\n"
-          printf "       -${STYLE_BOLD}d${STYLE_RESET}ebug output [0-3]\n"
-          printf "          0 = no debug injection/debug output\n"
-          printf "          1 = inject debug statements in: ${gSsdtID}.dsl\n"
-          printf "          2 = show debug output\n"
-          printf "          3 = both\n"
-          printf "       -${STYLE_BOLD}developer${STYLE_RESET} mode [0-1]\n"
-          printf "          0 = disabled – Use files from: ${gPath}\n"
-          printf "          1 = enabled  – Use files from: ${currentPath}\n"
-          printf "       -${STYLE_BOLD}extract${STYLE_RESET} ACPI tables to [target path]\n"
-          printf "       -${STYLE_BOLD}f${STYLE_RESET}requency (clock frequency)\n"
-          printf "       -${STYLE_BOLD}h${STYLE_RESET}elp info (this)\n"
-          printf "       -${STYLE_BOLD}lfm${STYLE_RESET}ode, lowest idle frequency\n"
-          printf "       -${STYLE_BOLD}l${STYLE_RESET}ogical processors [2-128]\n"
-          printf "       -${STYLE_BOLD}mode${STYLE_RESET} script mode [normal/custom]:\n"
-          printf "          normal – Use ACPI/IOREG data from the host computer\n"
-          printf "          custom – Use ACPI data from: ${gOverridePath/APIC.aml}\n"
-          printf "                 –                   : ${gOverridePath/DSDT.aml}\n"
-          printf "       -${STYLE_BOLD}m${STYLE_RESET}odel (example: MacPro6,1)\n"
-          printf "       -${STYLE_BOLD}o${STYLE_RESET}pen the previously generated SSDT\n"
-          printf "       -${STYLE_BOLD}p${STYLE_RESET}rocessor model (example: 'E3-1285L v3')\n"
-          printf "       -${STYLE_BOLD}show${STYLE_RESET} supported board-id and model combinations:\n"
-          printf "          Sandy Bridge\n"
-          printf "          Ivy Bridge\n"
-          printf "          Haswell\n"
-          printf "          Broadwell\n"
-          printf "          Skylake\n"
-          printf "       -${STYLE_BOLD}target${STYLE_RESET} CPU type:\n"
-          printf "          0 = Sandy Bridge\n"
-          printf "          1 = Ivy Bridge\n"
-          printf "          2 = Haswell\n"
-          printf "          3 = Broadwell\n"
-          printf "          4 = Skylake\n"
-          printf "       -${STYLE_BOLD}turbo${STYLE_RESET} maximum (turbo) frequency:\n"
-          printf "          6300 for Sandy Bridge and Ivy Bridge\n"
-          printf "          8000 for Haswell and Broadwell\n"
-          printf "       -${STYLE_BOLD}t${STYLE_RESET}dp [11.5 - 150]\n"
-          printf "       -${STYLE_BOLD}w${STYLE_RESET}orkarounds for Ivy Bridge:\n"
-          printf "          0 = no workarounds\n"
-          printf "          1 = inject extra (turbo) P-State at the top with maximum (turbo) frequency + 1 MHz\n"
-          printf "          2 = inject extra P-States at the bottom\n"
-          printf "          3 = both\n"
-          printf "       -${STYLE_BOLD}x${STYLE_RESET}cpm mode:\n"
-          printf "          0 = XCPM mode disabled\n"
-          printf "          1 = XCPM mode enabled\n\n"
+          printf "\n使用方式: ./ssdtPRGen.sh [-abcdfhlmptwx]\n"
+printf "       -a 处理器设备名 (例如: CPU0, C000)\n"
+printf "       -bclk 时钟频率 (基准时钟频率)\n"
+printf "       -b 设备ID (例如如: Mac-F60DEB81FF30ACF6)\n"
+printf "       -cpus 处理器物理核心数 [1-4]\n"
+printf "       -d 调试信息处理:\n"
+printf "          0 = 不输出任何调试信息\n"
+printf "          1 = 将调试信息输出到: ssdt.dsl\n"
+printf "          2 = 仅显示调试信息，不写入文件\n"
+printf "          3 = 等同于同时应用1和2选项\n"
+printf "       -developer 开发者模式 [0-1]\n"
+printf "          0 = 关闭 – 从 /Users/mac/Library/ssdtPRGen 处读取所需文件\n"
+printf "          1 = 开启 – 从 /Users/mac 处读取所需文件\n"
+printf "       -extract 提取ACPI表至 [路径]\n"
+printf "       -f 处理器主频 (时钟频率)\n"
+printf "       -h 显示帮助信息 (即显示此文档)\n"
+printf "       -lfm 最低空载频率\n"
+printf "       -l 处理器逻辑核心数 [2-128]\n"
+printf "       -mode 脚本工作模式 [normal/custom]:\n"
+printf "           normal – 从计算机中自动提取所需的ACPI信息\n"
+printf "           custom – 从此处读取所需的acpi信息: /Users/[username]/Desktop\n"
+printf "       -m SMBIOS机型信息 (例如: MacPro6,1)\n"
+printf "       -o 打开预先生成好的SSDT文件\n"
+printf "       -p 处理器型号 (例如: 'E3-1285L v3')\n"
+printf "       -show 显示支持的处理器标识:\n"
+printf "           Sandy Bridge\n"
+printf "           Ivy Bridge\n"
+printf "           Haswell\n"
+printf "           Broadwell\n"
+printf "           Skylake\n"
+printf "       -target 处理器类型:\n"
+printf "          0 = Sandy Bridge\n"
+printf "          1 = Ivy Bridge\n"
+printf "          2 = Haswell\n"
+printf "          3 = Broadwell\n"
+printf "          4 = Skylake\n"
+printf "       -turbo 最高睿频频率:\n"
+printf "          对于 Sandy Bridge 和 Ivy Bridge 处理器，这个值通常是6300\n"
+printf "          对于 Haswell 和 Broadwell 处理器，这个值通常是8000\n"
+printf "       -t 额定功耗 [11.5 - 150]\n"
+printf "       -w 设定 Ivy Bridge 处理器的工作模式:\n"
+printf "          0 = no workarounds\n"
+printf "          1 = inject extra (turbo) P-State at the top with maximum (turbo) frequency + 1 MHz\n"
+printf "          2 = inject extra P-States at the bottom\n"
+printf "          3 = both\n"
+printf "       -x 内核电源管理设置:\n"
+printf "          0 = 禁用 XCPM 内核电源管理\n"
+printf "          1 = 启用 XCPM 内核电源管理\n"
+printf "\n"
+printf "Note: lihaoyun6 汉化于 2016.7.5\n\n"
           #
           # Stop script (success).
           #
@@ -4336,11 +4314,8 @@ function main()
   let assumedTDP=0
   let maxTurboFrequency=0
 
-  printf "\n${STYLE_BOLD}ssdtPRGen.sh${STYLE_RESET} v0.9  Copyright (c) 2011-2012 by † RevoGirl\n"
-  echo   '             v6.6  Copyright (c) 2013 by † Jeroen'
-  printf "             v$gScriptVersion Copyright (c) 2013-$(date "+%Y") by Pike R. Alpha\n"
+  printf "\n${STYLE_BOLD}ssdtPRGen.sh${STYLE_RESET} v$gScriptVersion Copyright (c) 2016.7.5 by lihaoyun6\n"
   echo   '-----------------------------------------------------------'
-  printf "${STYLE_BOLD}Bugs${STYLE_RESET} > https://github.com/Piker-Alpha/ssdtPRGen.sh/issues <\n"
 
   _checkSourceFilename
   _getScriptArguments "$@"
