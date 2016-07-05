@@ -3785,12 +3785,7 @@ printf "           custom – 从此处读取所需的acpi信息: /Users/[userna
 printf "       -m SMBIOS机型信息 (例如: MacPro6,1)\n"
 printf "       -o 打开预先生成好的SSDT文件\n"
 printf "       -p 处理器型号 (例如: 'E3-1285L v3')\n"
-printf "       -show 显示支持的处理器标识:\n"
-printf "           Sandy Bridge\n"
-printf "           Ivy Bridge\n"
-printf "           Haswell\n"
-printf "           Broadwell\n"
-printf "           Skylake\n"
+printf "       -showall 显示所有支持的处理器型号\n"
 printf "       -target 处理器类型:\n"
 printf "          0 = Sandy Bridge\n"
 printf "          1 = Ivy Bridge\n"
@@ -4073,6 +4068,11 @@ printf "Note: lihaoyun6 汉化于 2016.7.5\n\n"
                             exit 0
                             ;;
 
+                  -showall) shift
+
+                             open https://raw.githubusercontent.com/lihaoyun6/ssdtPRGen.sh/Pentium/CPUlist.txt
+                             ;;
+                             
                   -p) shift
 
                       if [[ "$1" =~ ^[a-zA-Z0-9\ \-]+$ ]];
