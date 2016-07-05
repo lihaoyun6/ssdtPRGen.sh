@@ -30,7 +30,7 @@ gScriptVersion=18.9
 #
 # GitHub branch to pull data from (master or Beta).
 #
-gGitHubBranch="P&C"
+gGitHubBranch="Pentium"
 
 #
 # Github download URL.
