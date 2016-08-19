@@ -1,4 +1,5 @@
 #!/bin/bash
+export TERM=xterm-color
 #
 # Script (ssdtPRGen.sh) to create ssdt-pr.dsl for Apple Power Management Support.
 #
